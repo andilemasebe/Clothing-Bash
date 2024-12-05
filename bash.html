@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turn360</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+
+        body {
+            padding: 25px;
+        }
+        .title {
+            color: #5C6AC4;
+        }
+
+
+        /* Custom Typography */
+@font-face {
+            font-family: 'NikeFont';
+            src: url('./fonts/NikeFont.ttf') format('truetype');
+        }
+
+        body {
+            font-family: 'NikeFont', sans-serif;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Arc Curved Shapes - Example on Hero Section */
+        .arc-shape {
+            background: linear-gradient(to right, #f0f0f0, #e0e0e0);
+            border-radius: 0 0 50% 50%;
+            height: 200px;
+            width: 100%;
+            position: absolute;
+            bottom: -100px;
+            z-index: -1;
+        }
+
+        /* Scroll-triggered animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Parallax scrolling on featured products */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 500px;
+        }
+
+        .parallax-content {
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent overlay */
+            color: white;
+            padding: 20px;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Hamburger menu toggling */
+        .nav-menu {
+            display: none;
+        }
+        .nav-menu.active {
+            display: block;
+        }
+    </style>
+
+    <style>
+        /* Chatbot Styles */
+        .chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: orange;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .chatbot-window {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .chatbot-header {
+            background-color: #f1f1f1;
+            color: black;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chatbot-input button {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+
+
+    <style>
+        #myBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 30px;
+            z-index: 99;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            background-color: orange;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        #myBtn:hover {
+            background-color: #555;
+        }
+    </style>
+
+    <!--<style>
+            :root {
+            --bg-color: #fff;
+            --text-color: #333;
+            --primary-color: #007bff;
+            --user-msg-bg: #007bff;
+            --bot-msg-bg: #e9ecef;
+        }
+
+        body.dark-mode {
+            --bg-color: #333;
+            --text-color: #fff;
+            --primary-color: #90caf9;
+            --user-msg-bg: #90caf9;
+            --bot-msg-bg: #555;
+        }
+
+        .chatbot-container {
+            background-color: var(--bg-color);
+        }
+
+        .chat-header, button {
+            background-color: var(--primary-color);
+        }
+
+        .user-message {
+            background-color: var(--user-msg-bg);
+        }
+
+        .bot-message {
+            background-color: var(--bot-msg-bg);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            color: var(--text-color);
+            font-style: italic;
+        }
+
+        .dark-mode-toggle {
+            cursor: pointer;
+        }
+
+        </style> -->
+
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <!-- <header class="bg-black text-white w-full top-0 left-0 z-10">
+        <div class="container mx-auto flex items-center justify-between p-4">
+            -->
+            <!-- Left side: Logo and Hamburger Icon -->
+           <!-- <div class="flex items-center space-x-4">
+                <button class="text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="#" class="text-2xl font-bold">BisquitX</a>
+            </div> -->
+
+            <!-- Right side: Icons -->
+           <!-- <div class="flex items-center space-x-6">
+                <a href="#" class="hover:text-gray-400 text-xl"><i class="fas fa-map-marker-alt"></i></a>
+                <a href="#" class="hover:text-gray-400 text-xl"><i class="fas fa-user"></i></a>
+                <a href="#" class="hover:text-gray-400 text-xl relative">
+                    <i class="fas fa-shopping-cart"></i> -->
+                    <!-- Badge for cart icon -->
+                   <!-- <span class="absolute top-0 right-0 bg-white text-black rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </div> -->
+
+        <!-- Search Bar -->
+      <!--  <div class="bg-gray-900 p-4">
+            <div class="container mx-auto">
+                <div class="relative">
+                    <input type="text" placeholder="Search products, stores or brands" class="w-full py-2 px-4 rounded-full bg-gray-800 text-white placeholder-gray-500 focus:outline-none">
+                    <i class="fas fa-search absolute top-3 left-4 text-gray-500"></i>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Category Tabs -->
+        <!-- <nav class="bg-white text-black">
+            <div class="container mx-auto flex justify-center space-x-8 p-4">
+                <a href="#" class="hover:text-gray-500 font-medium bg-black text-white px-3 py-1 rounded-full">All</a>
+                <a href="#" class="hover:text-gray-500 font-medium">Women</a>
+                <a href="#" class="hover:text-gray-500 font-medium">Men</a>
+
+                <a href="#" class="hover:text-gray-500 font-medium">Sports</a>
+                <a href="#" class="hover:text-gray-500 font-medium">Home</a>
+            </div>
+        </nav>
+    </header> -->
+    
+    
+    
+    <!-- Navbar -->
+<header class="bg-black text-white w-full top-0 left-0 z-10">
+    <div class="container mx-auto flex items-center justify-between p-4">
+        <!-- Left side: Logo and Hamburger Icon -->
+        <div class="flex items-center space-x-4">
+            <button id="hamburger" class="text-2xl focus:outline-none" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="#" class="text-2xl font-bold">BisquitX</a>
+        </div>
+
+        <!-- Right side: Icons -->
+        <div class="flex items-center space-x-6">
+            <a href="#" class="hover:text-gray-400 text-xl" aria-label="Find a Store"><i class="fas fa-map-marker-alt"></i></a>
+            <a href="#" class="hover:text-gray-400 text-xl" aria-label="User Profile"><i class="fas fa-user"></i></a>
+            <a href="#" class="hover:text-gray-400 text-xl relative" aria-label="Shopping Cart">
+                <i class="fas fa-shopping-cart"></i>
+                <!-- Badge for cart icon -->
+                <span class="absolute top-0 right-0 bg-white text-black rounded-full text-xs w-5 h-5 flex items-center justify-center">0</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="bg-gray-900 p-4">
+        <div class="container mx-auto">
+            <div class="relative">
+                <input type="text" placeholder="Search products, stores or brands" class="w-full py-2 px-4 rounded-full bg-gray-800 text-white placeholder-gray-500 focus:outline-none" aria-label="Search">
+                <i class="fas fa-search absolute top-3 left-4 text-gray-500"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <nav class="bg-white text-black hidden lg:block">
+        <div class="container mx-auto flex justify-center space-x-8 p-4">
+            <a href="#" class="hover:text-gray-500 font-medium bg-black text-white px-3 py-1 rounded-full" aria-current="page">All</a>
+            <a href="#" class="hover:text-gray-500 font-medium">Women</a>
+            <a href="#" class="hover:text-gray-500 font-medium">Men</a>
+            <a href="#" class="hover:text-gray-500 font-medium">Sports</a>
+            <a href="#" class="hover:text-gray-500 font-medium">Home</a>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="bg-white text-black hidden lg:hidden">
+        <div class="container mx-auto flex flex-col space-y-4 p-4">
+            <a href="#" class="hover:text-gray-500 font-medium bg-black text-white px-3 py-1 rounded-full" aria-current="page">All</a>
+            <a href="#" class="hover:text-gray-500 font-medium">Women</a>
+            <a href="#" class="hover:text-gray-500 font-medium">Men</a>
+            <a href="#" class="hover:text-gray-500 font-medium">Sports</a>
+            <a href="#" class="hover:text-gray-500 font-medium">Home</a>
+        </div>
+    </div>
+</header>
+
+
+
+    <section class="hero relative h-screen bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/17492491/pexels-photo-17492491/free-photo-of-man-posing-in-black-suit-on-stairs.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')">
+        <div class="arc-shape"></div>
+        <div class="container mx-auto h-full flex items-center justify-center px-4">
+            <div class="text-center text-white z-10">
+                <h1 class="text-6xl font-bold mb-4">Find Your Greatness</h1>
+                <p class="text-xl mb-8">
+                    Unleash your potential with BisquitX latest innovations.
+                </p>
+                <a href="#" class="bg-white text-black px-6 py-3 rounded-full font-bold hover:bg-gray-200">Shop Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-products py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-8">Featured Products</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
+                <div class="product glass rounded-lg p-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
+                    <img src="https://images.pexels.com/photos/5447948/pexels-photo-5447948.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 1" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-medium mb-2">BisquitX Shoes</h3>
+                    <p class="text-gray-600 mb-4">
+                        Men's Running Shoe
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl font-bold">R2150</span>
+                        <button class="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product glass rounded-lg p-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
+                    <img src="https://images.pexels.com/photos/5447948/pexels-photo-5447948.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 2" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-medium mb-2">BisquitX React Infinity Run Flyknit 3</h3>
+                    <p class="text-gray-600 mb-4">
+                        Women's Road Running Shoe
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl font-bold">R5270</span>
+                        <button class="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product glass rounded-lg p-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
+                    <img src="https://images.pexels.com/photos/5447948/pexels-photo-5447948.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 3" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-medium mb-2">BisquitX Shoes</h3>
+                    <p class="text-gray-600 mb-4">
+                        Men's Road Running Shoes
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl font-bold">R9140</span>
+                        <button class="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product glass rounded-lg p-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
+                    <img src="https://images.pexels.com/photos/5447948/pexels-photo-5447948.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 4" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-medium mb-2">BisquitX</h3>
+                    <p class="text-gray-600 mb-4">
+                        Men's Road Running Shoes
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl font-bold">R3180</span>
+                        <button class="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">Add to Cart</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="parallax" style="background-image: url('./img/parallax-bg.jpg')">
+        <div class="parallax-content container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-4">Innovation Meets Style</h2>
+            <p class="text-xl mb-8">
+                Experience the future of sportswear
+            </p>
+            <a href="#" class="bg-white text-black px-6 py-3 rounded-full font-bold hover:bg-gray-200">Explore More</a>
+        </div>
+    </section>
+
+    <section class="testimonials bg-gray-200 py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-8">What Our Customers Say</h2>
+
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide p-4 glass rounded-lg shadow-lg">
+                        <p class="text-lg mb-4">
+                            "I love the comfort and support of BisquitX shoes. They are perfect for my workouts!"
+                        </p>
+                        <p class="text-gray-600 font-medium">
+                            - Mike Naki
+                        </p>
+                    </div>
+                    <div class="swiper-slide p-4 glass rounded-lg shadow-lg">
+                        <p class="text-lg mb-4">
+                            "The quality of BisquitX clothing is amazing. It's stylish and durable."
+                        </p>
+                        <p class="text-gray-600 font-medium">
+                            - Bongie Jika
+                        </p>
+                    </div>
+                    <div class="swiper-slide p-4 glass rounded-lg shadow-lg">
+                        <p class="text-lg mb-4">
+                            "BisquitX customer service is excellent. They are always helpful and friendly."
+                        </p>
+                        <p class="text-gray-600 font-medium">
+                            - Lwando Mbiko
+                        </p>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Content Sections (for smooth scroll demonstration) -->
+    <section id="section1" class="h-screen flex items-center justify-center bg-gray-200">
+        <h1 class="text-4xl">Men's Collection</h1>
+    </section>
+    <section id="section2" class="h-screen flex items-center justify-center bg-gray-300">
+        <h1 class="text-4xl">Women's Collection</h1>
+    </section>
+    <section id="section3" class="h-screen flex items-center justify-center bg-gray-400">
+        <h1 class="text-4xl">Kids' Collection</h1>
+    </section>
+    <section id="section4" class="h-screen flex items-center justify-center bg-gray-500">
+        <h1 class="text-4xl">Shoes</h1>
+    </section>
+    <section id="section5" class="h-screen flex items-center justify-center bg-gray-600">
+        <h1 class="text-4xl">Customize Your Style</h1>
+    </section>
+
+    <button onclick="topFunction()" id="myBtn" title="Go to top">  <i class="fa fa-up-arrow"></i></button>
+
+    <!-- Chatbot Icon -->
+    <div class="chatbot-icon" onclick="toggleChatbot()">
+        <i class="fa fa-comments"></i>
+    </div>
+
+    <!-- Chatbot Window -->
+    <div class="chatbot-window" id="chatbot">
+        <div class="chatbot-header">
+            Chat with Bisquit!
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="userMessage" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- <div class="chatbot-container">
+                <div class="chat-header">
+                    Chatbot
+                    <button onclick="toggleDarkMode()" id="mode-toggle">🌙</button>
+                </div>
+                <div class="chat-body" id="chat-body"></div>
+                <div id="typing-indicator" class="typing-indicator">Bot is typing...</div>
+                <div class="chat-footer">
+                    <input type="text" id="user-input" placeholder="Type your message...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>-->
+
+
+    <!-- <footer class="bg-black text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                    <h4 class="font-bold mb-2">About BisquitX</h4>
+                    <ul class="text-sm">
+                        <li><a href="#" class="hover:text-gray-400">News</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Careers</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Investors</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Sustainability</a></li>
+                    </ul>
+                </div>
+                <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                    <h4 class="font-bold mb-2">Get Help</h4>
+                    <ul class="text-sm">
+                        <li><a href="#" class="hover:text-gray-400">Order Status</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Shipping and Delivery</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Returns</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                    <h4 class="font-bold mb-2">Products</h4>
+                    <ul class="text-sm">
+                        <li><a href="#" class="hover:text-gray-400">Shoes</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Clothing</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Accessories</a></li>
+                        <li><a href="#" class="hover:text-gray-400">Equipment</a></li>
+                    </ul>
+                </div>
+                <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                    <h4 class="font-bold mb-2">Explore</h4>
+                    <ul class="text-sm">
+                        <li><a href="#" class="hover:text-gray-400">BisquitX App</a></li>
+                        <li><a href="#" class="hover:text-gray-400">BisquitX Run Club</a></li>
+                        <li><a href="#" class="hover:text-gray-400">BisquitX Training Club</a></li>
+                        <li><a href="#" class="hover:text-gray-400">SNKRS</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="mt-8 text-center">
+                <p class="text-sm">
+                    &copy; 2024 BisquitX, Inc. All Rights Reserved.
+                </p>
+            </div>
+        </div>
+    </footer> -->
+    
+    
+    <footer class="bg-black text-white py-8">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap justify-between">
+            <!-- About BisquitX Section -->
+            <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                <h4 class="font-bold mb-2">About BisquitX</h4>
+                <ul class="text-sm">
+                    <li><a href="#" class="hover:text-gray-400">News</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Careers</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Investors</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Sustainability</a></li>
+                </ul>
+            </div>
+
+            <!-- Get Help Section -->
+            <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                <h4 class="font-bold mb-2">Get Help</h4>
+                <ul class="text-sm">
+                    <li><a href="#" class="hover:text-gray-400">Order Status</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Shipping and Delivery</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Returns</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Products Section -->
+            <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                <h4 class="font-bold mb-2">Products</h4>
+                <ul class="text-sm">
+                    <li><a href="#" class="hover:text-gray-400">Shoes</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Clothing</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Accessories</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Equipment</a></li>
+                </ul>
+            </div>
+
+            <!-- Explore Section -->
+            <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                <h4 class="font-bold mb-2">Explore</h4>
+                <ul class="text-sm">
+                    <li><a href="#" class="hover:text-gray-400">BisquitX App</a></li>
+                    <li><a href="#" class="hover:text-gray-400">BisquitX Run Club</a></li>
+                    <li><a href="#" class="hover:text-gray-400">BisquitX Training Club</a></li>
+                    <li><a href="#" class="hover:text-gray-400">SNKRS</a></li>
+                </ul>
+            </div>
+
+            <!-- Payment Methods Section -->
+            <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/6 mb-4">
+                <h4 class="font-bold mb-2">Payment Methods</h4>
+                <div class="flex space-x-2 mt-2">
+                    <img src="path/to/visa-icon.png" alt="Visa" class="h-6">
+                    <img src="path/to/mastercard-icon.png" alt="MasterCard" class="h-6">
+                    <img src="path/to/amex-icon.png" alt="American Express" class="h-6">
+                    <img src="path/to/paypal-icon.png" alt="PayPal" class="h-6">
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom Text -->
+        <div class="mt-8 text-center">
+            <p class="text-sm">
+                &copy; 2024 BisquitX, Inc. All Rights Reserved.
+            </p>
+        </div>
+    </div>
+</footer>
+
+
+
+    <!-- JavaScript for Slideshow -->
+    <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            const slides = document.getElementsByClassName("slide");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {
+                slideIndex = 1
+            }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 3000); // Change image every 3 seconds
+        }
+
+        function changeSlide(n) {
+            slideIndex += n;
+            const slides = document.getElementsByClassName("slide");
+            if (slideIndex > slides.length) {
+                slideIndex = 1
+            }
+            if (slideIndex < 1) {
+                slideIndex = slides.length
+            }
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slides[slideIndex - 1].style.display = "block";
+        }
+    </script>
+
+    <!-- JavaScript for Hamburger Menu Toggle -->
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+    <script>
+
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 50,
+                },
+            },
+        });
+
+        // Scroll Triggers
+        ScrollReveal().reveal('.reveal', {
+            distance: '50px',
+            duration: 1500,
+            interval: 200,
+            reset: true
+        });
+
+
+        gsap.from('.hero h1', {
+            duration: 2, y: 50, opacity: 0, ease: "power4.out"
+        });
+        gsap.from('.hero p', {
+            duration: 2, y: 30, opacity: 0, ease: "power4.out", delay: 0.5
+        });
+        gsap.from('.hero a', {
+            duration: 2, y: 20, opacity: 0, ease: "power4.out", delay: 1
+        });
+
+    </script>
+
+    <script>
+        // Get the button:
+        let mybutton = document.getElementById("myBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {
+            scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+    </script>
+
+    <script>
+        <!-- Chatbot Icon --> < div class = "chatbot-icon" onclick = "toggleChatbot()" > < i class = "fa fa-comments"></i> < /div >
+
+        <!-- Chatbot Window --> < div class = "chatbot-window" id = "chatbot" > < div class = "chatbot-header" > Chat with Andile!</div> < div class = "chatbot-messages" id = "chatbotMessages"></div > < div class = "chatbot-input" > < input type = "text" id = "userMessage" placeholder = "Type a message..." > < button onclick = "sendMessage()" > Send < /button> < /div > < /div>     // Toggle Chatbot Display
+        function toggleChatbot() {
+            const chatbot = document.getElementById('chatbot');
+            chatbot.style.display = chatbot.style.display === 'none' || chatbot.style.display === '' ? 'flex': 'none';
+        }
+
+        // Append message to chatbot window
+        function appendMessage(sender, text) {
+            const messageContainer = document.createElement('div');
+            messageContainer.style.margin = '10px 0';
+            messageContainer.style.textAlign = sender === 'user' ? 'right': 'left';
+
+            const messageBubble = document.createElement('div');
+            messageBubble.style.display = 'inline-block';
+            messageBubble.style.padding = '8px 12px';
+            messageBubble.style.borderRadius = '10px';
+            messageBubble.style.backgroundColor = sender === 'user' ? '#007bff': '#f4f4f4';
+            messageBubble.style.color = sender === 'user' ? 'white': 'black';
+            messageBubble.textContent = text;
+
+            messageContainer.appendChild(messageBubble);
+            document.getElementById('chatbotMessages').appendChild(messageContainer);
+            document.getElementById('chatbotMessages').scrollTop = document.getElementById('chatbotMessages').scrollHeight;
+        }
+
+        // Send message and receive response
+        function sendMessage() {
+            const input = document.getElementById('userMessage');
+            const message = input.value.trim();
+            if (message === '') return;
+
+            // User message
+            appendMessage('user', message);
+            input.value = '';
+
+            // Simulated bot response
+            setTimeout(() => {
+                const botResponse = `You said: ${message}`;
+                appendMessage('bot', botResponse);
+            }, 500);
+        }
+    </script>
+
+
+    <script>
+        <!-- Chatbot Icon --> < div class = "chatbot-icon" onclick = "toggleChatbot()" > < i class = "fa fa-comments"></i> < /div >
+
+        <!-- Chatbot Window --> < div class = "chatbot-window" id = "chatbot" > < div class = "chatbot-header" > Chat with Andile!</div> < div class = "chatbot-messages" id = "chatbotMessages"></div > < div class = "chatbot-input" > < input type = "text" id = "userMessage" placeholder = "Type a message..." > < button onclick = "sendMessage()" > Send < /button> < /div > < /div>     // Toggle Chatbot Display
+        function toggleChatbot() {
+            const chatbot = document.getElementById('chatbot');
+            chatbot.style.display = chatbot.style.display === 'none' || chatbot.style.display === '' ? 'flex': 'none';
+        }
+
+        // Append message to chatbot window
+        function appendMessage(sender, text) {
+            const messageContainer = document.createElement('div');
+            messageContainer.style.margin = '10px 0';
+            messageContainer.style.textAlign = sender === 'user' ? 'right': 'left';
+
+            const messageBubble = document.createElement('div');
+            messageBubble.style.display = 'inline-block';
+            messageBubble.style.padding = '8px 12px';
+            messageBubble.style.borderRadius = '10px';
+            messageBubble.style.backgroundColor = sender === 'user' ? '#007bff': '#f4f4f4';
+            messageBubble.style.color = sender === 'user' ? 'white': 'black';
+            messageBubble.textContent = text;
+
+            messageContainer.appendChild(messageBubble);
+            document.getElementById('chatbotMessages').appendChild(messageContainer);
+            document.getElementById('chatbotMessages').scrollTop = document.getElementById('chatbotMessages').scrollHeight;
+        }
+
+        // Send message and receive response
+        function sendMessage() {
+            const input = document.getElementById('userMessage');
+            const message = input.value.trim();
+            if (message === '') return;
+
+            // User message
+            appendMessage('user', message);
+            input.value = '';
+
+            // Simulated bot response
+            setTimeout(() => {
+                const botResponse = `You said: ${message}`;
+                appendMessage('bot', botResponse);
+            }, 500);
+        }
+    </script>
+
+   <!-- <script>
+        let userName = "";
+        let isDarkMode = false;
+
+        function sendMessage() {
+            const userInput = document.getElementById("user-input").value;
+            if (userInput.trim() === "") return;
+
+            // Display user message
+            displayMessage(userInput, "user");
+
+            // Command handling
+            if (userInput.startsWith("/")) {
+                handleCommand(userInput);
+            } else {
+                // Show typing indicator
+                showTypingIndicator(true);
+                setTimeout(() => {
+                    // Generate bot response based on input
+                    const botResponse = generateBotResponse(userInput);
+                    displayMessage(botResponse, "bot");
+                    showTypingIndicator(false);
+                }, 1000);
+            }
+
+            // Clear input
+            document.getElementById("user-input").value = "";
+        }
+
+        function displayMessage(message, sender) {
+            const chatBody = document.getElementById("chat-body");
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", sender === "user" ? "user-message": "bot-message");
+            messageElement.innerText = message;
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function showTypingIndicator(show) {
+            const typingIndicator = document.getElementById("typing-indicator");
+            typingIndicator.style.display = show ? "block": "none";
+        }
+
+        function generateBotResponse(userInput) {
+            userInput = userInput.toLowerCase();
+
+            if (!userName) {
+                userName = userInput;
+                return `Nice to meet you, ${userName}! How can I help you today?`;
+            }
+
+            if (userInput.includes("hello")) {
+                return `Hello ${userName}! How can I assist you?`;
+            } else if (userInput.includes("time")) {
+                return `The current time is ${new Date().toLocaleTimeString()}.`;
+            } else if (userInput.includes("date")) {
+                return `Today's date is ${new Date().toLocaleDateString()}.`;
+            } else if (userInput.includes("help")) {
+                return `You can ask me anything! Or try commands like /help, /time, /date, or /clear.`;
+            } else {
+                return "I'm here to help! Ask me anything.";
+            }
+        }
+
+        function handleCommand(command) {
+            switch (command.toLowerCase()) {
+                case "/help":
+                    displayMessage("Commands: /help, /time, /date, /clear", "bot");
+                    break;
+                case "/time":
+                    displayMessage(`The current time is ${new Date().toLocaleTimeString()}.`, "bot");
+                    break;
+                case "/date":
+                    displayMessage(`Today's date is ${new Date().toLocaleDateString()}.`, "bot");
+                    break;
+                case "/clear":
+                    document.getElementById("chat-body").innerHTML = "";
+                    break;
+                default:
+                    displayMessage("Unknown command. Type /help for a list of commands.", "bot");
+                }
+            }
+
+            function toggleDarkMode() {
+                isDarkMode = !isDarkMode;
+                document.body.classList.toggle("dark-mode", isDarkMode);
+                document.getElementById("mode-toggle").innerText = isDarkMode ? "☀️": "🌙";
+            }
+
+        </script> -->
+        
+        <!-- JavaScript to Toggle Mobile Menu -->
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Developer Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="styles.css">
+	
+	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.14.2/dist/full.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@7.4.1/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.0/gsap.min.js"></script>
+    <style>
+        /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 2px -2px gray;
+}
+
+header nav ul {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+}
+
+header nav ul li {
+    display: inline;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.profile-pic img {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.intro-text h1 {
+    font-size: 2.5rem;
+    margin-top: 20px;
+}
+
+.intro-text span {
+    font-weight: bold;
+}
+
+.intro-text p {
+    font-size: 1.5rem;
+    color: gray;
+}
+
+.buttons {
+    margin: 20px 0;
+}
+
+.buttons .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border: 2px solid black;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.buttons .download-cv {
+    background-color: white;
+}
+
+.buttons .contact-info {
+    background-color: black;
+    color: white;
+}
+
+.social-links {
+    display: flex;
+    gap: 10px;
+}
+
+.social-links a img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header nav ul {
+        flex-direction: column;
+    }
+
+    .intro {
+        padding: 10px;
+    }
+
+    .profile-pic img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .intro-text h1 {
+        font-size: 2rem;
+    }
+
+    .intro-text p {
+        font-size: 1.2rem;
+    }
+}
+
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1, h3 {
+    text-align: center;
+}
+
+.about-section {
+    text-align: center;
+    margin: 50px auto;
+    padding: 50px;
+    background-color: white;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 900px;
+}
+
+.about-section h3 {
+    font-size: 1.2rem;
+    color: gray;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.about-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.about-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.profile-photo img {
+    width: 250px;
+    height: 250px;
+    border-radius: 10px;
+    object-fit: cover;
+    filter: grayscale(100%);
+}
+
+.about-info {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.info-box {
+    padding: 20px;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+}
+
+.info-box h4 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.about-description {
+    max-width: 800px;
+    margin: 0 auto;
+    color: gray;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .about-info {
+        flex-direction: column;
+    }
+
+    .profile-photo img {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+
+.experience-section {
+    text-align: center;
+    margin: 50px auto;
+    padding: 50px;
+    background-color: white;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 900px;
+}
+
+.experience-section h3 {
+    font-size: 1.2rem;
+    color: gray;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.experience-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.experience-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.experience-box {
+    padding: 20px;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    text-align: left;
+    width: 400px;
+    background-color: #f9f9f9;
+}
+
+.experience-box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.experience-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.experience-box ul li {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.experience-box ul li span {
+    color: black;
+    font-weight: bold;
+    margin-right: 10px;
+    display: inline-block;
+    width: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .experience-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .experience-box {
+        width: 90%;
+    }
+}
+
+
+
+
+/* Sticky navbar with Flexbox */
+/* .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #333;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links li {
+    margin-left: 2rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.nav-links a:hover {
+    color: #f39c12;
+} */
+
+/* Hamburger menu styles */
+/* .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px;
+    transition: all 0.3s ease;
+} */
+
+/* Responsive behavior */
+/* @media (max-width: 768px) {
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        height: 100vh;
+        width: 100%;
+        flex-direction: column;
+        background-color: #333;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .nav-links li {
+        margin: 1rem 0;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links.active {
+        transform: translateX(0);
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+} */
+
+#contact {
+    padding: 2rem;
+    text-align: center;
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+    
+    <section class="intro">
+        <div class="profile-pic">
+            <img src="https://th.bing.com/th/id/OIP.6S2B1nIFmAP7xI5p8q5oRQHaJS?rs=1&pid=ImgDetMain" alt="John Doe">
+        </div>
+        <div class="intro-text">
+            <h1>Hello, I'm <span>Andile Masebe</span></h1>
+            <p>Frontend Developer</p>
+            <div class="buttons">
+                <a href="#" class="btn download-cv">Download CV</a>
+                <a href="#" class="btn contact-info">Contact Info</a>
+            </div>
+            <div class="social-links">
+                <a href="https://linkedin.com" target="_blank"><img src="linkedin-icon.png" alt="LinkedIn"></a>
+                <a href="https://github.com" target="_blank"><img src="github-icon.png" alt="GitHub"></a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section"> 
+            <div class="profile-photo">
+                <img src="https://th.bing.com/th/id/OIP.6S2B1nIFmAP7xI5p8q5oRQHaJS?rs=1&pid=ImgDetMain" alt="John Doe Profile">
+            </div>
+            <div class="about-info">
+                <div class="info-box">
+                    <h4>Experience</h4>
+                    <p>2+ years</p>
+                    <p>Frontend Development</p>
+                </div>
+                <div class="info-box">
+                    <h4>Education</h4>
+                    <p>B.Sc. Bachelors Degree</p>
+                    <p>M.Sc. Masters Degree</p>
+                </div>
+            </div>
+        </div>
+        <div class="about-description">
+            <p>A career in cybersecurity offers a wide range of opportunities as it is a rapidly growing field with a high demand for skilled professionals. Here are some common cybersecurity career paths
+            </p>
+        </div>
+    </section>
+
+    <section id="experience" class="experience-section">
+        <h3>Explore My</h3>
+        <h1>Experience</h1>
+        <div class="experience-content">
+            <div class="experience-box">
+                <h2>Frontend Development</h2>
+                <ul>
+                    <li><span>✔</span> HTML - Experienced</li>
+                    <li><span>✔</span> CSS - Experienced</li>
+                    <li><span>✔</span> SASS - Intermediate</li>
+                    <li><span>✔</span> JavaScript - Basic</li>
+                    <li><span>✔</span> TypeScript - Basic</li>
+                    <li><span>✔</span> Material UI - Intermediate</li>
+                </ul>
+            </div>
+            <div class="experience-box">
+                <h2>Backend Development</h2>
+                <ul>
+                    <li><span>✔</span> PostgreSQL - Basic</li>
+                    <li><span>✔</span> Node JS - Intermediate</li>
+                    <li><span>✔</span> Express JS - Intermediate</li>
+                    <li><span>✔</span> Git - Intermediate</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <form>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+    
+    <script src="script.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Hamburger menu functionality
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling is already handled via CSS (scroll-behavior: smooth)
+    </script>
+</body>
+</html>

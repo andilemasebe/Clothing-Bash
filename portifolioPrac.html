@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navbar</title>
+    <link rel="stylesheet" href="styles.css">
+	<style>
+		/* General body styling */
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			scroll-behavior: smooth; /* Enable smooth scrolling */
+		}
+
+		/* Sticky Navbar */
+		.navbar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1rem 2rem;
+			background-color: #333;
+			color: white;
+			position: sticky;
+			top: 0;
+			z-index: 1000;
+		}
+
+		.navbar .logo {
+			font-size: 1.5rem;
+			font-weight: bold;
+		}
+
+		.nav-links {
+			display: flex;
+			list-style: none;
+		}
+
+		.nav-links li {
+			margin-left: 2rem;
+		}
+
+		.nav-links a {
+			color: white;
+			text-decoration: none;
+			font-size: 1.2rem;
+		}
+
+		.nav-links a:hover {
+			color: #f39c12;
+		}
+
+		/* Hamburger menu styles */
+		.hamburger {
+			display: none;
+			flex-direction: column;
+			cursor: pointer;
+		}
+
+		.hamburger span {
+			width: 25px;
+			height: 3px;
+			background-color: white;
+			margin: 4px;
+			transition: all 0.3s ease;
+		}
+
+		/* Responsive behavior */
+		@media (max-width: 768px) {
+			.nav-links {
+				position: absolute;
+				top: 100%;
+				right: 0;
+				height: 100vh;
+				width: 100%;
+				flex-direction: column;
+				background-color: #333;
+				align-items: center;
+				justify-content: center;
+				transform: translateX(100%);
+				transition: transform 0.3s ease;
+			}
+
+			.nav-links.active {
+				transform: translateX(0);
+			}
+
+			.nav-links li {
+				margin: 1rem 0;
+			}
+
+			.hamburger {
+				display: flex;
+			}
+
+			.hamburger.active span:nth-child(1) {
+				transform: rotate(45deg) translate(5px, 5px);
+			}
+
+			.hamburger.active span:nth-child(2) {
+				opacity: 0;
+			}
+
+			.hamburger.active span:nth-child(3) {
+				transform: rotate(-45deg) translate(5px, -5px);
+			}
+		}
+
+		/* Section Styling for Demo */
+		section {
+			padding: 100px;
+			text-align: center;
+		}
+
+		#about, #experience, #projects, #contact {
+			background-color: #f4f4f4;
+			margin: 20px 0;
+		}
+
+	</style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">My Portfolio</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <section id="about">
+        <h1>About Me</h1>
+        <p>Some content about me...</p>
+    </section>
+
+    <section id="experience">
+        <h1>Experience</h1>
+        <p>My experience in frontend development...</p>
+    </section>
+
+    <section id="projects">
+        <h1>Projects</h1>
+        <p>Some of the projects I've worked on...</p>
+    </section>
+
+    <section id="contact">
+        <h1>Contact</h1>
+        <p>How to contact me...</p>
+    </section>
+
+    <script src="script.js"></script>
+	<script>
+		// Select DOM elements
+		const hamburger = document.querySelector('.hamburger');
+		const navLinks = document.querySelector('.nav-links');
+
+		// Toggle active class on hamburger menu and nav-links
+		hamburger.addEventListener('click', () => {
+			hamburger.classList.toggle('active');
+			navLinks.classList.toggle('active');
+		});
+
+	</script>
+</body>
+</html>
